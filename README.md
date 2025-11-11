@@ -1,2 +1,2 @@
-# data-science-3rd-sem
-all proggram o fdata
+# data-struture 3rd sem
+all program of data
