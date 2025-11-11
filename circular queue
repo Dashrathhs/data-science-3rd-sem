@@ -1,0 +1,106 @@
+#include <stdio.h>
+#include <stdlib.h>
+#define SIZE 5
+
+struct CircularQueue {
+    int items[SIZE];
+    int front;
+    int rear;
+};
+
+void initialize(struct CircularQueue *q) {
+    q->front = -1;
+    q->rear = -1;
+}
+
+int isFull(struct CircularQueue q) {
+    return (q.front == (q.rear + 1) % SIZE);
+}
+
+int isEmpty(struct CircularQueue q) {
+    return (q.front == -1);
+}
+
+struct CircularQueue enqueue(struct CircularQueue q, int value) {
+    if (isFull(q)) {
+        printf("Queue is full!\n");
+        return q;
+    }
+    if (isEmpty(q)) {
+        q.front = 0;
+    }
+    q.rear = (q.rear + 1) % SIZE;
+    q.items[q.rear] = value;
+    printf("Inserted %d\n", value);
+    return q;
+}
+
+struct CircularQueue dequeue(struct CircularQueue q) {
+    if (isEmpty(q)) {
+        printf("Queue is empty!\n");
+        return q;
+    }
+    int value = q.items[q.front];
+    if (q.front == q.rear) {
+        q.front = -1;
+        q.rear = -1;
+    } else {
+        q.front = (q.front + 1) % SIZE;
+    }
+    printf("Deleted %d\n", value);
+    return q;
+}
+
+void display(struct CircularQueue q) {
+    if (isEmpty(q)) {
+        printf("Queue is empty!\n");
+        return;
+    }
+    printf("Queue elements: ");
+    int i = q.front;
+    while (1) {
+        printf("%d ", q.items[i]);
+        if (i == q.rear)
+            break;
+        i = (i + 1) % SIZE;
+    }
+    printf("\n");
+}
+
+int main() {
+    struct CircularQueue q;
+    initialize(&q);
+
+    int choice, value;
+
+    while (1) {
+        printf("\n--- Circular Queue Menu ---\n");
+        printf("1. Enqueue\n");
+        printf("2. Dequeue\n");
+        printf("3. Display\n");
+        printf("4. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                printf("Enter value to insert: ");
+                scanf("%d", &value);
+                q = enqueue(q, value);
+                break;
+            case 2:
+                q = dequeue(q);
+                break;
+            case 3:
+                display(q);
+                break;
+            case 4:
+                exit(0);
+            default:
+                printf("Invalid choice! Try again.\n");
+        }
+    }
+
+    return 0;
+}
+
